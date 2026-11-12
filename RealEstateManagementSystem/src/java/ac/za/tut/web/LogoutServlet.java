@@ -1,7 +1,6 @@
 package ac.za.tut.web;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +19,7 @@ public class LogoutServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        response.sendRedirect("Login.jsp?success="
-                + URLEncoder.encode("You have been logged out successfully.", "UTF-8"));
+        response.sendRedirect("Login.jsp");
     }
 
     @Override

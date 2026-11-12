@@ -32,9 +32,9 @@
         <div class="card-head"><h2>Key figures</h2><%@ include file="/WEB-INF/jspf/exportButtons.jspf" %></div>
         <div class="stats">
             <div class="stat"><h3>Total properties</h3><div class="num"><%= totalProperties %></div><p>Registered listings</p></div>
-            <div class="stat" style="border-top-color:#15803d"><h3>Lease records</h3><div class="num"><%= activeLeases %></div><p>Tenant leases on file</p></div>
-            <div class="stat" style="border-top-color:#b91c1c"><h3>Open maintenance</h3><div class="num"><%= openMaintenance %></div><p>Pending or in progress</p></div>
-            <div class="stat" style="border-top-color:#1d4ed8"><h3>Pending applications</h3><div class="num"><%= pendingApps %></div><p>Awaiting approval</p></div>
+            <div class="stat"><h3>Lease records</h3><div class="num"><%= activeLeases %></div><p>Tenant leases on file</p></div>
+            <div class="stat"><h3>Open maintenance</h3><div class="num"><%= openMaintenance %></div><p>Pending or in progress</p></div>
+            <div class="stat"><h3>Pending applications</h3><div class="num"><%= pendingApps %></div><p>Awaiting approval</p></div>
         </div>
         <div class="form-actions"><a class="btn btn-outline" href="Reports.jsp"><%= Icon.svg("arrow-left") %> Back to reports</a></div>
     </div>

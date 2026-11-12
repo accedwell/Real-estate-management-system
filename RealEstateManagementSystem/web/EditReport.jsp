@@ -22,7 +22,7 @@
 <section class="page-hero h-reports">
     <div class="page-hero-inner">
         <div class="crumbs"><a href="Welcome.jsp">Dashboard</a> / <a href="Reports.jsp">Reports</a> / Edit</div>
-        <h1>Edit report record #<%= rep.getReportID() %></h1>
+        <h1>Edit report record</h1>
         <p>Correct the details stored in the report log.</p>
     </div>
 </section>

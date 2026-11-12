@@ -37,19 +37,18 @@
         <% } else { %>
         <div class="table-wrap">
             <table class="data">
-                <thead><tr><th>Ref</th><th>Applicant</th><th>Property</th><th>Date</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Applicant</th><th>Property</th><th>Date</th><th>Status</th><th></th></tr></thead>
                 <tbody id="rows">
                 <% for (Map<String, String> a : apps) { String id = a.get("applicationID"); %>
                     <tr>
-                        <td><strong>#<%= id %></strong></td>
-                        <td><%= Html.esc(a.get("applicantName")) %><div class="small muted">User #<%= a.get("tenantID") %></div></td>
-                        <td><%= Html.esc(a.get("address")) %><div class="small muted"><%= Html.esc(a.get("type")) %> &middot; #<%= a.get("propertyID") %></div></td>
-                        <td><%= a.get("date") %></td>
+                        <td><%= Html.esc(a.get("applicantName")) %></td>
+                        <td><%= Html.esc(a.get("address")) %><div class="small muted"><%= Html.esc(a.get("type")) %></div></td>
+                        <td class="nowrap"><%= a.get("date") %></td>
                         <td><span class="<%= Html.badge(a.get("status")) %>"><%= Html.esc(a.get("status")) %></span></td>
                         <td><div class="actions">
                             <% if ("Pending".equals(a.get("status"))) { %>
-                                <a class="btn btn-sm" style="background:var(--ok-bg);color:var(--ok)" href="ApplicationServlet?action=approve&applicationID=<%= id %>"><%= Icon.svg("check") %> Approve</a>
-                                <a class="btn btn-sm btn-danger" href="ApplicationServlet?action=reject&applicationID=<%= id %>"><%= Icon.svg("x") %> Reject</a>
+                                <a class="btn btn-sm btn-approve" href="ApplicationServlet?action=approve&applicationID=<%= id %>"><%= Icon.svg("check") %> Approve</a>
+                                <a class="btn btn-sm btn-reject" href="ApplicationServlet?action=reject&applicationID=<%= id %>"><%= Icon.svg("x") %> Reject</a>
                             <% } else if ("Approved".equals(a.get("status"))) { %>
                                 <a class="btn btn-sm btn-dark" href="TenantServlet?action=form&userID=<%= a.get("tenantID") %>&propertyID=<%= a.get("propertyID") %>"><%= Icon.svg("door-open") %> Admit tenant</a>
                             <% } %>

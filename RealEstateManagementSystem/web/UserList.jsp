@@ -33,15 +33,14 @@
         </div>
         <div class="table-wrap">
             <table class="data">
-                <thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th></th></tr></thead>
+                <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th></th></tr></thead>
                 <tbody id="rows">
                 <% for (User u : users) { %>
                     <tr>
-                        <td><strong>#<%= u.getUserID() %></strong></td>
                         <td><div style="display:flex;align-items:center;gap:10px"><span class="avatar"><%= Html.initial(u.getName()) %></span><%= Html.esc(u.getName()) %><%= (me != null && me == u.getUserID()) ? " <span class='small muted'>(you)</span>" : "" %></div></td>
-                        <td><span class="badge <%= "Admin".equals(u.getRole()) ? "badge-sold" : "badge-active" %>"><%= Html.esc(u.getRole()) %></span></td>
+                        <td><span class="badge badge-role-<%= u.getRole() == null ? "" : u.getRole().toLowerCase() %>"><%= Html.esc(u.getRole()) %></span></td>
                         <td><%= Html.esc(u.getEmail()) %></td>
-                        <td><%= Html.escOr(u.getPhone(), "—") %></td>
+                        <td class="nowrap"><%= Html.escOr(u.getPhone(), "—") %></td>
                         <td><div class="actions">
                             <a class="btn btn-sm btn-edit" href="UserServlet?action=edit&userID=<%= u.getUserID() %>"><%= Icon.svg("pencil") %> Edit</a>
                             <% if (me == null || me != u.getUserID()) { %>

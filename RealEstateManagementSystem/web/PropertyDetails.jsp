@@ -19,7 +19,7 @@
     <div class="page-hero-inner">
         <div class="crumbs"><a href="Welcome.jsp">Dashboard</a> / <a href="PropertyServlet?action=list">Properties</a> / Details</div>
         <h1><%= p != null ? Html.esc(p.getAddress()) : "Property not found" %></h1>
-        <% if (p != null) { %><p><%= Html.esc(p.getType()) %> &middot; Property #<%= p.getPropertyID() %></p><% } %>
+        <% if (p != null) { %><p><%= Html.esc(p.getType()) %></p><% } %>
     </div>
 </section>
 
@@ -42,8 +42,7 @@
             </div>
             <table class="data" style="margin-top:24px">
                 <tr><td class="muted">Address</td><td><strong><%= Html.esc(p.getAddress()) %></strong></td></tr>
-                <tr><td class="muted">Owner</td><td><%= Html.escOr(p.getOwnerName(), "User " + p.getOwnerID()) %> (ID <%= p.getOwnerID() %>)</td></tr>
-                <tr><td class="muted">Property ID</td><td>#<%= p.getPropertyID() %></td></tr>
+                <tr><td class="muted">Owner</td><td><%= Html.escOr(p.getOwnerName(), "User " + p.getOwnerID()) %></td></tr>
             </table>
             <div class="form-actions">
                 <a class="btn btn-outline" href="PropertyServlet?action=list"><%= Icon.svg("arrow-left") %> Back</a>

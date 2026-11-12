@@ -35,13 +35,12 @@
         <% } else { %>
         <div class="table-wrap">
             <table class="data">
-                <thead><tr><th>Ref</th><th>Property</th><th>Submitted</th><th>Status</th></tr></thead>
+                <thead><tr><th>Property</th><th>Submitted</th><th>Status</th></tr></thead>
                 <tbody>
                 <% for (Map<String, String> a : apps) { %>
                     <tr>
-                        <td><strong>#<%= a.get("applicationID") %></strong></td>
                         <td><a href="PropertyServlet?action=view&propertyID=<%= a.get("propertyID") %>"><%= Html.esc(a.get("address")) %></a><div class="small muted"><%= Html.esc(a.get("type")) %></div></td>
-                        <td><%= a.get("date") %></td>
+                        <td class="nowrap"><%= a.get("date") %></td>
                         <td><span class="<%= Html.badge(a.get("status")) %>"><%= Html.esc(a.get("status")) %></span></td>
                     </tr>
                 <% } %>

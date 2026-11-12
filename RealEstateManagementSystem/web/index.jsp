@@ -43,12 +43,6 @@
             <a href="Login.jsp" class="btn btn-primary btn-lg"><%= Icon.svg("log-in") %> Log in to Dashboard</a>
             <a href="SignUp.jsp" class="btn btn-ghost btn-lg"><%= Icon.svg("user-plus") %> Create an Account</a>
         </div>
-
-        <div class="hero-stats">
-            <div><div class="ico"><%= Icon.svg("users") %></div><strong>6</strong><span>User roles</span></div>
-            <div><div class="ico"><%= Icon.svg("download") %></div><strong>3</strong><span>Export formats (PDF, CSV, TXT)</span></div>
-            <div><div class="ico"><%= Icon.svg("clock") %></div><strong>24/7</strong><span>Maintenance logging</span></div>
-        </div>
     </div>
 </section>
 

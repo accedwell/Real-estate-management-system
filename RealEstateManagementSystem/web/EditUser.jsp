@@ -17,7 +17,7 @@
     <div class="page-hero-inner">
         <div class="crumbs"><a href="Welcome.jsp">Dashboard</a> / <a href="UserServlet?action=list">Users</a> / Edit</div>
         <h1>Edit <%= Html.esc(uf.getName()) %></h1>
-        <p>User #<%= uf.getUserID() %>. Leave the password empty to keep it unchanged.</p>
+        <p>Leave the password empty to keep it unchanged.</p>
     </div>
 </section>
 

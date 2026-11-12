@@ -18,7 +18,7 @@
 <section class="page-hero h-props">
     <div class="page-hero-inner">
         <div class="crumbs"><a href="Welcome.jsp">Dashboard</a> / <a href="PropertyServlet?action=list">Properties</a> / Edit</div>
-        <h1>Edit property #<%= pf.getPropertyID() %></h1>
+        <h1>Edit property</h1>
         <p><%= Html.esc(pf.getAddress()) %></p>
     </div>
 </section>

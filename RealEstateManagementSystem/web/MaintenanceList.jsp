@@ -46,11 +46,10 @@
         <% } else { %>
         <div class="table-wrap">
             <table class="data">
-                <thead><tr><th>#</th><th>Issue</th><th>Tenant / Property</th><th>Priority</th><th>Status</th><th>Cost</th><th>Notes</th><% if (canEdit) { %><th></th><% } %></tr></thead>
+                <thead><tr><th>Issue</th><th>Tenant / Property</th><th>Priority</th><th>Status</th><th>Cost</th><th>Notes</th><% if (canEdit) { %><th></th><% } %></tr></thead>
                 <tbody id="rows">
                 <% for (Map<String, String> r : reqs) { %>
                     <tr>
-                        <td><strong>#<%= r.get("requestID") %></strong></td>
                         <td style="max-width:260px"><%= Html.esc(r.get("description")) %></td>
                         <td><%= Html.esc(r.get("tenantName")) %><div class="small muted"><%= Html.esc(r.get("address")) %></div></td>
                         <td><span class="<%= Html.badge(r.get("priority")) %>"><%= Html.esc(r.get("priority")) %></span></td>

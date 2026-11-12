@@ -22,7 +22,7 @@
 <section class="page-hero h-tenants">
     <div class="page-hero-inner">
         <div class="crumbs"><a href="Welcome.jsp">Dashboard</a> / <a href="TenantServlet?action=list">Tenants</a> / Edit</div>
-        <h1>Edit lease #<%= t.getTenantID() %></h1>
+        <h1>Edit lease</h1>
         <p>Change the tenant, property or lease dates.</p>
     </div>
 </section>

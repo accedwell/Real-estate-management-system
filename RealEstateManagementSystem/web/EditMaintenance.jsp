@@ -17,8 +17,7 @@
 <section class="page-hero h-maint">
     <div class="page-hero-inner">
         <div class="crumbs"><a href="Welcome.jsp">Dashboard</a> / <a href="MaintenanceRequestServlet?action=list">Maintenance</a> / Update</div>
-        <h1>Update request #<%= req.getRequestID() %></h1>
-        <p>Lease #<%= req.getTenantID() %> &middot; Property #<%= req.getPropertyID() %></p>
+        <h1>Update maintenance request</h1>
     </div>
 </section>
 

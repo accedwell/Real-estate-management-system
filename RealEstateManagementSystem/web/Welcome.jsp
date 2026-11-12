@@ -25,8 +25,7 @@
     /** One labelled progress bar. */
     private String bar(String label, int value, int total, String tone) {
         int pct = total == 0 ? 0 : Math.round(value * 100f / total);
-        return "<div class=\"bar-row\"><div class=\"bar-top\"><span>" + label + "</span><strong>" + value
-                + " <em>" + pct + "%</em></strong></div><div class=\"bar\"><span class=\"bar-" + tone
+        return "<div class=\"bar-row\"><div class=\"bar-top\"><span>" + label + "</span><strong>" + pct + "%</strong></div><div class=\"bar\"><span class=\"bar-" + tone
                 + "\" style=\"width:" + pct + "%\"></span></div></div>";
     }
 
@@ -149,10 +148,10 @@
             <%= kpi("house", "gold", "Properties", m.getOrDefault("totalProperties", 0), available + " available &middot; " + rented + " rented") %>
             <%= kpi("users", "green", "Lease records", m.getOrDefault("activeLeases", 0), "Tenants on file") %>
             <%= kpi("wrench", "red", "Open maintenance", m.getOrDefault("openMaintenance", 0), high + " high priority") %>
-            <%= kpi("file-text", "blue", "Pending applications", m.getOrDefault("pendingApps", 0), "Awaiting a decision") %>
+            <%= kpi("file-text", "blue", "Applications", m.getOrDefault("pendingApps", 0), "Awaiting a decision") %>
         <% } else if (isMaint) { %>
             <%= kpi("clipboard-list", "gold", "Pending", pending, "Not started yet") %>
-            <%= kpi("clock", "blue", "In progress", inProgress, "Currently being worked on") %>
+            <%= kpi("clock", "blue", "In progress", inProgress, "Being worked on") %>
             <%= kpi("alert", "red", "High priority", high, "Open emergencies") %>
             <%= kpi("check-circle", "green", "Resolved", resolved, "Completed jobs") %>
         <% } else if (isTenant) { %>
@@ -164,7 +163,7 @@
             <%= kpi("house", "gold", "My properties", props.size(), "Registered in your name") %>
             <%= kpi("key", "green", "Rented", rented, available + " available &middot; " + sold + " sold") %>
             <%= kpi("wrench", "red", "Open maintenance", open, high + " high priority") %>
-            <%= kpi("trending-up", "blue", "Maintenance spend", money, "All requests on your properties") %>
+            <%= kpi("trending-up", "blue", "Maintenance spend", money, "Across your properties") %>
         <% } %>
     </div>
 
@@ -288,23 +287,23 @@
                     <svg class="donut" viewBox="0 0 42 42" aria-hidden="true">
                         <circle cx="21" cy="21" r="15.915" fill="none" stroke="#eef2f7" stroke-width="5"/>
                         <circle cx="21" cy="21" r="15.915" fill="none" stroke="#c9a24a" stroke-width="5" stroke-dasharray="<%= String.format(Locale.ROOT, "%.2f %.2f", rLen, c - rLen) %>" stroke-dashoffset="25"/>
-                        <circle cx="21" cy="21" r="15.915" fill="none" stroke="#15803d" stroke-width="5" stroke-dasharray="<%= String.format(Locale.ROOT, "%.2f %.2f", aLen, c - aLen) %>" stroke-dashoffset="<%= String.format(Locale.ROOT, "%.2f", 25 - rLen) %>"/>
-                        <circle cx="21" cy="21" r="15.915" fill="none" stroke="#b91c1c" stroke-width="5" stroke-dasharray="<%= String.format(Locale.ROOT, "%.2f %.2f", sLen, c - sLen) %>" stroke-dashoffset="<%= String.format(Locale.ROOT, "%.2f", 25 - rLen - aLen) %>"/>
+                        <circle cx="21" cy="21" r="15.915" fill="none" stroke="#1a3550" stroke-width="5" stroke-dasharray="<%= String.format(Locale.ROOT, "%.2f %.2f", aLen, c - aLen) %>" stroke-dashoffset="<%= String.format(Locale.ROOT, "%.2f", 25 - rLen) %>"/>
+                        <circle cx="21" cy="21" r="15.915" fill="none" stroke="#b6c3d1" stroke-width="5" stroke-dasharray="<%= String.format(Locale.ROOT, "%.2f %.2f", sLen, c - sLen) %>" stroke-dashoffset="<%= String.format(Locale.ROOT, "%.2f", 25 - rLen - aLen) %>"/>
                     </svg>
                     <div class="donut-center"><strong><%= occ %>%</strong><span>rented</span></div>
                 </div>
                 <%= bar("Rented", rented, props.size(), "gold") %>
-                <%= bar("Available", available, props.size(), "green") %>
-                <%= bar("Sold", sold, props.size(), "red") %>
+                <%= bar("Available", available, props.size(), "navy") %>
+                <%= bar("Sold", sold, props.size(), "slate") %>
             </div>
             <% } %>
 
             <% if (isMaint || isStaff) { %>
             <div class="card">
                 <div class="card-head"><div><h2>Open work by priority</h2><p><%= open %> open request<%= open == 1 ? "" : "s" %></p></div></div>
-                <%= bar("High", high, open, "red") %>
+                <%= bar("High", high, open, "navy") %>
                 <%= bar("Medium", medium, open, "gold") %>
-                <%= bar("Low", low, open, "green") %>
+                <%= bar("Low", low, open, "slate") %>
             </div>
             <% } %>
 

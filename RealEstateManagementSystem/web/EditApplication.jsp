@@ -17,7 +17,7 @@
 <section class="page-hero h-apps">
     <div class="page-hero-inner">
         <div class="crumbs"><a href="Welcome.jsp">Dashboard</a> / <a href="ApplicationServlet?action=list">Applications</a> / Edit</div>
-        <h1>Edit application #<%= af.getApplicationID() %></h1>
+        <h1>Edit application</h1>
         <p>Update the applicant, property, date or decision.</p>
     </div>
 </section>

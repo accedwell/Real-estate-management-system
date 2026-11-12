@@ -40,13 +40,12 @@
         <% } else { %>
         <div class="table-wrap">
             <table class="data">
-                <thead><tr><th>Lease</th><th>Tenant</th><th>Property</th><th>Start</th><th>End</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Tenant</th><th>Property</th><th>Start</th><th>End</th><th>Status</th><th></th></tr></thead>
                 <tbody id="rows">
                 <% for (Map<String, String> l : leases) { %>
                     <tr>
-                        <td><strong>#<%= l.get("tenantID") %></strong></td>
                         <td><strong><%= Html.esc(l.get("tenantName")) %></strong><div class="small muted"><%= Html.esc(l.get("email")) %></div></td>
-                        <td><%= Html.esc(l.get("address")) %><div class="small muted">Property #<%= l.get("propertyID") %></div></td>
+                        <td><%= Html.esc(l.get("address")) %></td>
                         <td><%= l.get("leaseStart") %></td>
                         <td><%= l.get("leaseEnd").isEmpty() ? "<span class='muted'>Open-ended</span>" : l.get("leaseEnd") %></td>
                         <td><span class="badge <%= "Active".equals(l.get("status")) ? "badge-active" : "" %>"><%= l.get("status") %></span></td>

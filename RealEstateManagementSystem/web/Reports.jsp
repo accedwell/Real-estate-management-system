@@ -88,13 +88,12 @@
         <% } else { %>
         <div class="table-wrap">
             <table class="data">
-                <thead><tr><th>ID</th><th>Type</th><th>By user</th><th>Date</th><th>File</th><th></th></tr></thead>
+                <thead><tr><th>Type</th><th>By user</th><th>Date</th><th>File</th><th></th></tr></thead>
                 <tbody>
                 <% for (Report r : reports) { String ex = exportAction(r.getType()); %>
                     <tr>
-                        <td><strong>#<%= r.getReportID() %></strong></td>
                         <td><%= Html.esc(r.getType()) %></td>
-                        <td>#<%= r.getGeneratedBy() %></td>
+                        <td>User <%= r.getGeneratedBy() %></td>
                         <td><%= r.getDate() %></td>
                         <td class="small muted"><%= Html.esc(r.getFilePath()) %></td>
                         <td><div class="actions">

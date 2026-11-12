@@ -67,7 +67,7 @@
                         <span><%= Icon.svg("ruler") %> <%= p.getSize() %> m&sup2;</span>
                         <span><%= Icon.svg("bed") %> <%= p.getRooms() %> room<%= p.getRooms() == 1 ? "" : "s" %></span>
                     </div>
-                    <p class="small muted" style="margin-top:6px">#<%= p.getPropertyID() %> &middot; Owner: <%= Html.escOr(p.getOwnerName(), "User " + p.getOwnerID()) %></p>
+                    <p class="small muted" style="margin-top:6px">Owner: <%= Html.escOr(p.getOwnerName(), "User " + p.getOwnerID()) %></p>
                     <% if (canManage) { %>
                     <div class="actions" style="display:flex; gap:6px; margin-top:12px">
                         <a class="btn btn-sm btn-edit" href="PropertyServlet?action=edit&propertyID=<%= p.getPropertyID() %>"><%= Icon.svg("pencil") %> Edit</a>
