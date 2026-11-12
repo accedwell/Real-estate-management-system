@@ -1,0 +1,7 @@
+<%@page import="ac.za.tut.util.Icon"%>
+<div class="toolbar">
+    <a class="btn btn-sm btn-outline" href="ReportServlet?action=<%= exportBase %>CSV<%= exportQuery %>"><%= Icon.svg("download") %> CSV</a>
+    <a class="btn btn-sm btn-outline" href="ReportServlet?action=<%= exportBase %>TXT<%= exportQuery %>"><%= Icon.svg("download") %> Text</a>
+    <a class="btn btn-sm btn-dark" href="ReportServlet?action=<%= exportBase %>PDF<%= exportQuery %>"><%= Icon.svg("download") %> PDF</a>
+    <button type="button" class="btn btn-sm btn-outline" onclick="window.print()"><%= Icon.svg("printer") %> Print</button>
+</div>

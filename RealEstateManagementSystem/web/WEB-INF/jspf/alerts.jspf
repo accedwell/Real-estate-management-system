@@ -1,0 +1,18 @@
+<%@page import="ac.za.tut.util.Icon"%>
+<%@page import="ac.za.tut.util.Html"%>
+<%
+    Object alertErr = request.getAttribute("errorMessage");
+    if (alertErr == null) { alertErr = request.getParameter("error"); }
+    Object alertOk = request.getAttribute("successMessage");
+    if (alertOk == null) { alertOk = request.getParameter("success"); }
+%>
+<% if (alertErr != null && !String.valueOf(alertErr).isEmpty()) { %>
+    <div class="alert alert-error" role="alert"><%= Icon.svg("alert") %><span><%= Html.esc(alertErr) %></span></div>
+<% } %>
+<% String alertInfo = request.getParameter("info");
+   if (alertInfo != null && !alertInfo.isEmpty()) { %>
+    <div class="alert alert-info" role="status"><%= Icon.svg("info") %><span><%= Html.esc(alertInfo) %></span></div>
+<% } %>
+<% if (alertOk != null && !String.valueOf(alertOk).isEmpty()) { %>
+    <div class="alert alert-success" role="status"><%= Icon.svg("check-circle") %><span><%= Html.esc(alertOk) %></span></div>
+<% } %>

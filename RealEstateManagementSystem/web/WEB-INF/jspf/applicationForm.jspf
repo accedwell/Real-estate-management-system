@@ -1,0 +1,38 @@
+<%@page import="ac.za.tut.entities.Application"%>
+<%@page import="ac.za.tut.entities.Property"%>
+<%@page import="ac.za.tut.entities.User"%>
+<%@page import="ac.za.tut.util.Html"%>
+<%@page import="java.util.List"%>
+<%-- Shared staff application form. Including page sets: Application af, List<User> afTenants, List<Property> afProps --%>
+<div class="form-grid">
+    <div class="field">
+        <label for="tenantID">Applicant (tenant)</label>
+        <select id="tenantID" name="tenantID" required>
+            <option value="" disabled <%= af == null ? "selected" : "" %>>Choose a tenant&hellip;</option>
+            <% for (User u : afTenants) { %>
+                <option value="<%= u.getUserID() %>" <%= (af != null && af.getTenantID() == u.getUserID()) ? "selected" : "" %>><%= Html.esc(u.getName()) %> (ID <%= u.getUserID() %>)</option>
+            <% } %>
+        </select>
+    </div>
+    <div class="field">
+        <label for="propertyID">Property</label>
+        <select id="propertyID" name="propertyID" required>
+            <option value="" disabled <%= af == null ? "selected" : "" %>>Choose a property&hellip;</option>
+            <% for (Property p : afProps) { %>
+                <option value="<%= p.getPropertyID() %>" <%= (af != null && af.getPropertyID() == p.getPropertyID()) ? "selected" : "" %>><%= Html.esc(p.getAddress()) %> &middot; <%= Html.esc(p.getStatus()) %></option>
+            <% } %>
+        </select>
+    </div>
+    <div class="field">
+        <label for="date">Application date</label>
+        <input type="date" id="date" name="date" required data-today value="<%= (af != null && af.getDate() != null) ? af.getDate() : "" %>">
+    </div>
+    <div class="field">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+            <% for (String s : new String[]{"Pending", "Approved", "Rejected"}) { %>
+                <option <%= (af != null && s.equals(af.getStatus())) ? "selected" : "" %>><%= s %></option>
+            <% } %>
+        </select>
+    </div>
+</div>

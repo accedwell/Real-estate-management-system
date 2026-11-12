@@ -121,15 +121,56 @@ The execution map for bringing the system into software production is planned ac
 
 ## ⚙️ Local Development Setup
 
-### Prerequisite Checklist
-*   Apache Tomcat 9.0+ web profile server runtime environment
-*   Java Development Kit (JDK) 8 or higher
-*   PostgreSQL / MySQL server installation
+### Prerequisites
+*   JDK 8 or newer
+*   A Java EE / Servlet 4 container: GlassFish 4.1+ (NetBeans default) or Apache Tomcat 9
+*   PostgreSQL 12 or newer
 
-### Installation Instructions
+### 1. Create the database
+```sql
+CREATE DATABASE "RealEstateManagementSystem";
+```
+Connect to it and run `The RealEstate Management System  DBscript.sql`. The script drops and recreates all tables and loads demo data.
 
-1. **Clone the repository:**
-   
-```bash
-   git clone [https://github.com/YourUsername/real-estate-reporting-module.git](https://github.com/YourUsername/real-estate-reporting-module.git)
-   cd real-estate-reporting-module
+### 2. Point the app at your database (optional)
+The app connects to `jdbc:postgresql://localhost:5432/RealEstateManagementSystem` as `postgres` / `123456` by default.
+To use something else, set these environment variables (or `-D` JVM properties) on the server. No recompile is needed:
+
+| Variable | Example |
+| :--- | :--- |
+| `REMS_DB_URL` | `jdbc:postgresql://192.168.18.52:5432/RealEstateManagementSystem` |
+| `REMS_DB_USER` | `postgres` |
+| `REMS_DB_PASSWORD` | `your-password` |
+
+### 3. Build and deploy
+*   **NetBeans:** open the `RealEstateManagementSystem` folder as a project, then choose **Clean and Build**, then **Run**. Library jars are in `RealEstateManagementSystem/lib`.
+*   **Ready-made WAR:** deploy `RealEstateManagementSystem/dist/RealEstateManagementSystem.war` to GlassFish or copy it into Tomcat's `webapps` folder.
+
+Then open `http://localhost:8080/RealEstateManagementSystem/`.
+
+### 4. Demo accounts
+Every demo account uses the password **`Password123`**.
+
+| Role | Email |
+| :--- | :--- |
+| Administrator | `admin@rems.co.za` |
+| Property Manager | `diana@demo.com` |
+| Real Estate Agent | `charlie@demo.com` |
+| Property Owner | `alice@demo.com`, `sipho@demo.com` |
+| Tenant | `bob@demo.com`, `lerato@demo.com`, `thabo@demo.com` |
+| Maintenance Staff | `eddie@demo.com` |
+
+Public sign-up creates **Tenant** accounts only. Owner and staff accounts are created by an administrator under **Users** or **Add Member**.
+
+---
+
+## 🔐 Security
+*   Every page except the landing, login and sign-up pages requires a session. `AuthFilter` also enforces role-based access to each page and action.
+*   Passwords are stored as SHA-256 hashes. All user-supplied text is HTML-escaped before display, and every query uses prepared statements.
+*   Session cookies are HttpOnly, and the session ID is renewed at login.
+
+---
+
+## 🎨 Design
+All pages share one stylesheet (`web/css/app.css`) and common fragments in `web/WEB-INF/jspf/` (head, navigation, alerts, footer and shared forms).
+Background photography in `web/images/` comes from [Unsplash](https://unsplash.com) and is used under the Unsplash License.

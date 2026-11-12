@@ -1,0 +1,4 @@
+<footer class="site-footer app-footer">
+    &copy; <%= java.time.Year.now() %> REMS &middot; Real Estate Management System &middot; Manage your property with ease
+</footer>
+</div><%-- closes .app-main opened in nav.jspf --%>

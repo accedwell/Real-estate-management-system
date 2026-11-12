@@ -1,0 +1,35 @@
+<%@page import="ac.za.tut.entities.User"%>
+<%@page import="ac.za.tut.util.Html"%>
+<%-- Shared account form. Including page sets: User uf (may be null), boolean ufIsNew --%>
+<%
+    String[][] ufRoles = {{"Tenant", "Tenant"}, {"Owner", "Property Owner"}, {"Agent", "Real Estate Agent"},
+                          {"Manager", "Property Manager"}, {"Maintenance", "Maintenance Staff"}, {"Admin", "Administrator"}};
+%>
+<div class="form-grid">
+    <div class="field">
+        <label for="name">Full name</label>
+        <input type="text" id="name" name="name" maxlength="100" required value="<%= uf != null ? Html.esc(uf.getName()) : "" %>">
+    </div>
+    <div class="field">
+        <label for="role">Role</label>
+        <select id="role" name="role" required>
+            <% if (uf == null) { %><option value="" disabled selected>Choose a role&hellip;</option><% } %>
+            <% for (String[] r : ufRoles) { %>
+                <option value="<%= r[0] %>" <%= (uf != null && r[0].equals(uf.getRole())) ? "selected" : "" %>><%= r[1] %></option>
+            <% } %>
+        </select>
+    </div>
+    <div class="field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" maxlength="100" required value="<%= uf != null ? Html.esc(uf.getEmail()) : "" %>">
+    </div>
+    <div class="field">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" name="phone" maxlength="20" placeholder="+27 82 123 4567" value="<%= uf != null ? Html.escOr(uf.getPhone(), "") : "" %>">
+    </div>
+    <div class="field full">
+        <label for="password"><%= ufIsNew ? "Temporary password" : "New password" %></label>
+        <input type="password" id="password" name="password" minlength="6" <%= ufIsNew ? "required" : "" %>
+               placeholder="<%= ufIsNew ? "At least 6 characters" : "Leave blank to keep the current password" %>">
+    </div>
+</div>

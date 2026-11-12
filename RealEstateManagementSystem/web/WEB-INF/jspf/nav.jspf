@@ -1,0 +1,131 @@
+<%@page import="ac.za.tut.util.Icon"%>
+<%@page import="ac.za.tut.util.Html"%>
+<%@page import="ac.za.tut.dao.ReportDAO"%>
+<%--
+    App shell: fixed sidebar + top bar. Opens <div class="app-main">, which
+    footer.jspf closes, so every logged-in page sits inside the layout.
+--%>
+<%!
+    /** Works out which sidebar section the current page belongs to. */
+    private String navSection(javax.servlet.http.HttpServletRequest req) {
+        String uri = (String) req.getAttribute("javax.servlet.forward.request_uri");
+        if (uri == null) uri = req.getRequestURI();
+        String q = (String) req.getAttribute("javax.servlet.forward.query_string");
+        if (q == null) q = req.getQueryString();
+        if (q == null) q = "";
+        String page = uri.substring(uri.lastIndexOf('/') + 1);
+
+        if (page.equals("Welcome.jsp")) return "dashboard";
+        if (page.equals("PropertyListServlet") || page.equals("MyProperty.jsp")) return "mine";
+        if (page.equals("PropertyServlet") && (q.contains("listOwners") || q.contains("viewByOwner"))) return "owners";
+        if (page.equals("PropertyOwnerList.jsp")) return "owners";
+        if (page.startsWith("Property") || page.endsWith("Property.jsp")) return "properties";
+        if (q.contains("myApplications") || page.startsWith("TenantAdd") || page.startsWith("TenantApplication")) return "myapps";
+        if (page.startsWith("Tenant") || page.equals("EditTenant.jsp")
+                || page.startsWith("assign_tenant") || page.equals("AssignTenantServlet")) return "tenants";
+        if (page.startsWith("Application") || page.endsWith("Application.jsp")) return "applications";
+        if (page.startsWith("Maintenance") || page.equals("EditMaintenance.jsp")) return "maintenance";
+        if (page.startsWith("Report") || page.endsWith("_report.jsp") || page.equals("EditReport.jsp")) return "reports";
+        if (page.equals("signupclient.jsp") || page.equals("RegisterServletClient")) return "addmember";
+        if (page.startsWith("User") || page.endsWith("User.jsp")) return "users";
+        return "";
+    }
+
+    /** One sidebar link, highlighted when it is the current section. */
+    private String navLink(String current, String key, String href, String icon, String label, int badge) {
+        return "<a class=\"side-link" + (key.equals(current) ? " active" : "") + "\" href=\"" + href + "\">"
+                + Icon.svg(icon) + "<span>" + label + "</span>"
+                + (badge > 0 ? "<em class=\"side-badge\">" + badge + "</em>" : "") + "</a>";
+    }
+%>
+<%
+    String navRole = (String) session.getAttribute("role");
+    String navName = (String) session.getAttribute("name");
+    String navEmail = (String) session.getAttribute("email");
+    boolean navStaff = "Admin".equals(navRole) || "Manager".equals(navRole) || "Agent".equals(navRole);
+    String navCur = navSection(request);
+
+    int navPending = 0, navOpen = 0;
+    if (navStaff || "Maintenance".equals(navRole)) {
+        try {
+            java.util.Map<String, Integer> nm = new ReportDAO().getSummaryMetrics();
+            navPending = nm.getOrDefault("pendingApps", 0);
+            navOpen = nm.getOrDefault("openMaintenance", 0);
+        } catch (Exception ignored) { /* badges are optional */ }
+    }
+    String navRoleLabel = "Manager".equals(navRole) ? "Property Manager" : "Agent".equals(navRole) ? "Real Estate Agent"
+            : "Owner".equals(navRole) ? "Property Owner" : "Maintenance".equals(navRole) ? "Maintenance Staff"
+            : "Admin".equals(navRole) ? "Administrator" : Html.esc(navRole);
+%>
+<aside class="sidebar" id="sidebar">
+    <a class="side-brand" href="Welcome.jsp">
+        <%= Icon.logo() %>
+        <span>REMS<small>Real Estate Management</small></span>
+    </a>
+
+    <nav class="side-nav">
+        <p class="side-label">Overview</p>
+        <%= navLink(navCur, "dashboard", "Welcome.jsp", "chart", "Dashboard", 0) %>
+        <%= navLink(navCur, "properties", "PropertyServlet?action=list", "house", "Properties", 0) %>
+
+        <% if ("Tenant".equals(navRole)) { %>
+            <p class="side-label">My rental</p>
+            <%= navLink(navCur, "mine", "PropertyListServlet", "key", "My Home", 0) %>
+            <%= navLink(navCur, "myapps", "ApplicationServlet?action=myApplications", "file-text", "My Applications", 0) %>
+            <%= navLink(navCur, "maintenance", "MaintenanceRequestServlet?action=list", "wrench", "Maintenance", 0) %>
+        <% } else if ("Owner".equals(navRole)) { %>
+            <p class="side-label">My portfolio</p>
+            <%= navLink(navCur, "mine", "PropertyListServlet", "key", "My Properties", 0) %>
+            <%= navLink(navCur, "reports", "ReportServlet?action=maintenance", "trending-up", "Maintenance Report", 0) %>
+        <% } else if ("Maintenance".equals(navRole)) { %>
+            <p class="side-label">Work</p>
+            <%= navLink(navCur, "maintenance", "MaintenanceRequestServlet?action=list", "clipboard-list", "Work Orders", navOpen) %>
+        <% } %>
+
+        <% if (navStaff) { %>
+            <p class="side-label">Management</p>
+            <%= navLink(navCur, "owners", "PropertyServlet?action=listOwners", "briefcase", "Owners", 0) %>
+            <%= navLink(navCur, "tenants", "TenantServlet?action=list", "users", "Tenants &amp; Leases", 0) %>
+            <%= navLink(navCur, "applications", "ApplicationServlet?action=list", "file-text", "Applications", navPending) %>
+            <%= navLink(navCur, "maintenance", "MaintenanceRequestServlet?action=list", "wrench", "Maintenance", navOpen) %>
+        <% } %>
+
+        <% if ("Admin".equals(navRole) || "Manager".equals(navRole)) { %>
+            <p class="side-label">Insights</p>
+            <%= navLink(navCur, "reports", "Reports.jsp", "trending-up", "Reports", 0) %>
+        <% } %>
+
+        <% if ("Admin".equals(navRole)) { %>
+            <p class="side-label">Administration</p>
+            <%= navLink(navCur, "users", "UserServlet?action=list", "settings", "Users", 0) %>
+            <%= navLink(navCur, "addmember", "signupclient.jsp", "user-plus", "Add Member", 0) %>
+        <% } %>
+    </nav>
+
+    <div class="side-user">
+        <span class="avatar"><%= Html.initial(navName) %></span>
+        <div class="side-user-text">
+            <strong><%= Html.escOr(navName, "User") %></strong>
+            <span><%= navRoleLabel %></span>
+        </div>
+        <a class="side-logout" href="LogoutServlet" title="Log out" aria-label="Log out"><%= Icon.svg("log-out") %></a>
+    </div>
+</aside>
+<div class="side-backdrop" onclick="document.body.classList.remove('side-open')"></div>
+
+<div class="app-main">
+    <header class="app-topbar">
+        <button class="side-toggle" type="button" aria-label="Open menu" onclick="document.body.classList.toggle('side-open')"><%= Icon.svg("menu") %></button>
+        <div class="topbar-date"><%= Icon.svg("calendar") %> <%= java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("EEE, d MMM yyyy")) %></div>
+        <div class="topbar-right">
+            <% if (navStaff) { %>
+                <a class="btn btn-sm btn-primary" href="PropertyServlet?action=add"><%= Icon.svg("plus") %> New property</a>
+            <% } else if ("Tenant".equals(navRole)) { %>
+                <a class="btn btn-sm btn-primary" href="MaintenanceRequestServlet?action=new"><%= Icon.svg("wrench") %> Report an issue</a>
+            <% } %>
+            <div class="topbar-user">
+                <span class="avatar"><%= Html.initial(navName) %></span>
+                <span class="who"><strong><%= Html.escOr(navName, "User") %></strong><span><%= Html.escOr(navEmail, navRoleLabel) %></span></span>
+            </div>
+        </div>
+    </header>

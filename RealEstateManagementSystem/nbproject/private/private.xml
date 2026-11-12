@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/AddProperty.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/Reports.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/LeaseManagement.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/TenantList.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/AddApplication.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/src/java/ac/za/tut/web/ApplicationServlet.java</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/src/java/ac/za/tut/dao/DBConnection.java</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/EditUser.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/property_maintenance_report.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/AddUser.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/EditMaintenance.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/EditReport.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/EditApplication.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/MaintenanceList.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/MaintenanceRequest.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/src/java/ac/za/tut/web/ReportServlet.java</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/src/java/ac/za/tut/web/TenantServlet.java</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/assign_tenant.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/EditProperty.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/EditTenant.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/src/java/ac/za/tut/dao/UserDAO.java</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/Welcome.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/SignUp.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/ApplicationList.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/Login.jsp</file>
+            <file>file:/C:/Users/mandl/Desktop/RealEstateManagementSystem%20(2)/RealEstateManagementSystem/RealEstateManagementSystem/web/TenantForm.jsp</file>
+        </group>
+    </open-files>
+</project-private>
