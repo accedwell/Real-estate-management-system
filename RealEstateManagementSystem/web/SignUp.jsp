@@ -23,7 +23,6 @@
         </a>
 
         <div class="auth2-copy">
-            <span class="auth2-pill"><%= Icon.svg("clock") %> Takes less than a minute</span>
             <h2>Find your next <span>home</span> with ease.</h2>
             <p>Create your account to browse available properties, apply online and log repairs whenever you need them.</p>
 

@@ -1,140 +1,70 @@
-# -The-RealEstate-Management-System(REMS)
-Manage Your Property With Ease
 # Real Estate Management System (REMS)
 
-[![Java EE](https://img.shields.io/badge/JavaEE-7.0-blue.svg)](https://javaee.github.io/)
-[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)](https://www.postgresql.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+**Manage your property with ease.**
 
-An enterprise-grade property compliance and tracking engine tailored for the South African property management ecosystem. Built on a modular monolithic Java EE architecture, this application processes operational registers and structures multi-table log records into on-screen verification tables before compiling secure compliance document exports (`.pdf`, `.csv`, `.txt`).
+[![Java EE](https://img.shields.io/badge/Java%20EE-Servlet%204%20%2F%20JSP-0b1b2b.svg)](https://javaee.github.io/)
+[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-24476a.svg)](https://www.postgresql.org/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-c9a24a.svg)](LICENSE)
 
----
+REMS is a web application for managing rental properties in South Africa. Property listings, rental applications, leases, maintenance requests and reports all live in one system. Each user signs in to a dashboard built for their role.
 
-## 👥 Authors & Contributors
-
-*   **Mabane TS** — 231594760
-*   **Mkhatshwa ML** — 224266499
-*   **Khomu PN** — 224142218
-*   **Aphane IT** — 221062167
-*   **Sibambo AB** — 230547335
-*   **Dlamini OS** — 224437382
+Built with Java Servlets and JSP, PostgreSQL and OpenPDF. Runs on GlassFish or Apache Tomcat.
 
 ---
 
-## 👁️ System Vision & Objectives
+## Features
 
-The primary objective of the **Real Estate Management System (REMS)** is to replace legacy spreadsheet-based workflows with a unified collection of secure transactional registers and analytical reporting tools. 
-
-Key functional objectives include:
-*   **Property Registry Lifecycle:** Automated property data capture, historical data updates, and media/document correlation.
-*   **Tenant Workflow Automation:** Simplified tenant screening, secure admission tracking, lease management, and structured tenant departure verification.
-*   **Operational Logs:** Integrated maintenance request tracking, property inspections monitoring, and historical management registers.
-*   **Compliance Analytics:** On-screen data previews paired with multi-format audit report compilation (`.pdf`, `.csv`, `.txt`) matching programmatic South African market requirements.
-
----
-
-## 👤 System Actors
-
-The platform isolates system interactions into six discrete role-based profiles:
-1.  **Administrator:** Monitors system state telemetry, reviews operational logs, handles validation exceptions, and issues structural governance documents.
-2.  **Property Manager:** Manages listing states, reviews application workflows, and monitors ongoing occupancy balances.
-3.  **Property Owner:** Tracks active assets and monitors structural property allocation logs.
-4.  **Real Estate Agent:** Captures incoming property assets, updates marketing data, links physical files/images, and logs active sales agreements.
-5.  **Tenant:** Searches active listings, submits rental application forms, and files maintenance tickets.
-6.  **Maintenance Staff:** Audits incoming maintenance requests, updates repair pipeline metrics, logs resource allocations, and commits engineering action reports.
+| Area | What you can do |
+| :--- | :--- |
+| **Landing page** | Public home page with a photo hero, a feature overview and links to log in or create an account. |
+| **Accounts** | Log in with email and password. Tenants sign up themselves. Administrators create all other accounts. |
+| **Dashboards** | A dashboard for each role with key figures, occupancy and priority charts, recent activity and quick actions. |
+| **Properties** | Browse listings as photo cards with live search. View details. Add, edit and remove properties. Set the status to Available, Rented or Sold. |
+| **Owners** | See every owner and the properties registered to them. Owners see only their own properties. |
+| **Applications** | Tenants apply for available homes and track their applications. Staff approve or reject them, then admit the tenant. |
+| **Tenants and leases** | Admit a tenant to a property with lease dates (the property becomes Rented), edit a lease, or end it. |
+| **Maintenance** | Tenants log repairs on their own lease with a priority. Maintenance staff work through a queue and update the status, cost and notes. |
+| **Reports** | Management summary, maintenance history (filtered by status and priority), tenant leases and applications. Export each as **PDF**, **CSV** or **TXT**. Every export is recorded in a report log. |
+| **Users** | Administrators add, edit and remove users and assign roles. |
+| **My profile** | Every user can update their name and phone number and change their password (the current password is required). |
+| **Notifications** | A bell in the top bar shows role-specific updates, such as applications waiting, open or high-priority repairs, and a tenant's application decisions. |
+| **Quick search** | Press **Ctrl + K** (or click the search box) to jump to any page or action. |
+| **Productivity** | Click any table header to sort. Messages can be dismissed. Tenants can save favourite properties (the heart) and filter to saved homes. Properties can be sorted by address, size or rooms. |
+| **Landing page** | "How it works" steps, a live **Featured homes** preview of available properties, and an FAQ. |
 
 ---
 
-## ⚡ Functional Requirements Matrix
+## Roles
 
-*   **Authentication Tier:** Secure multi-role user registration and cryptographic user session authentication.
-*   **Data Capture Layer:** Form validation structures for property details, ownership metrics, and structural specifications.
-*   **Document Management Storage:** Relational mapping of media attachments, tenancy contracts, and physical inspection documents.
-*   **Tenancy Lifecycle Pipelines:** Tracking engines handling onboarding profiles, active lease monitoring, dispute management, and departure slip generation.
-*   **Maintenance Workflows:** Dynamic engineering tickets allowing status transformations, photo attachments, and prioritization updates.
+| Role | Access |
+| :--- | :--- |
+| **Administrator** | Everything, including user management and the report log. |
+| **Property Manager** | Properties, owners, tenants and leases, applications, maintenance and reports. |
+| **Real Estate Agent** | Properties, owners, tenants and leases, applications and maintenance. |
+| **Property Owner** | Their own properties, plus a maintenance report for those properties (with exports). |
+| **Tenant** | Browse homes, apply, view their own leases and applications, and log maintenance requests. |
+| **Maintenance Staff** | The maintenance work queue: update the status, cost and notes on each request. |
 
----
-
-## 📊 Behavioral Architecture: Event-Table Blueprint
-
-| Event | Trigger Input | Source Actor | Core Use Case | System Response | Destination |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Buyer applies for property** | Submits property application | Buyer | Property Application | Logs application data to database | Database / Admin |
-| **Administrator reviews application** | Opens pending applications list | Administrator | Review Application | Compiles application approval/rejection state | Buyer / Admin |
-| **Tenant submits rental application** | Submits localized rental form | Tenant | Rental Application | Logs rental contract application row | Database / Admin |
-| **Administrator reviews rental app** | Requests active application queue | Administrator | Review Application | Commits lease approval/rejection vector | Tenant / Admin |
-| **Property Agent captures property** | Enters building details profile | Property Agent | Capture Property Data | Generates new active property registry row | Database |
-| **Agent uploads property photo** | Attaches structural image media | Property Agent | Upload Property Photo | Persists media array to record mapping | Database |
-| **Tenant admitted to property** | Assigns tenant profile to unit | Data Clerk | Record Tenant Submission | Transforms target property state mapping | Database |
-| **Property sale recorded** | Completes entry profile | Property Agent | Record Property Sale | Commits asset handoff logging row | Database / Admin |
-| **Tenant submits maintenance request** | Requests utility repair help | Tenant | Record Maintenance Request| Inserts active engineering ticket row | Database / Admin |
-| **Administrator generates property report**| Invokes property asset breakdown | Administrator | Print Property Report | Compiles real-time property catalog output | Administrator |
-| **Administrator generates tenant report**  | Invokes active lease audit trail | Administrator | Print Tenant Report | Compiles live tenancy summary ledger | Administrator |
-| **Administrator generates sales report**   | Invokes historical ledger review | Administrator | Print Sales Report | Compiles historical volume summary output | Administrator |
-| **Administrator generates maintenance report**| Invokes engineering ticket log | Administrator | Print Maintenance Report | Compiles status and timeline metrics | Administrator |
+Access is enforced on the server by `AuthFilter`, page by page and action by action, not just hidden in the menu.
 
 ---
 
-## 📝 Use Case Specifications
-
-### 1. Capture Property Data
-*   **Triggering Event:** A Property Manager decides to add a new property listing into the system.
-*   **Brief Description:** A real estate agent records complete property information (owner details, property specifications, and images) into the system so that the property can be listed for sale or rent.
-*   **Primary Actor:** Property Manager
-*   **Related Use Cases:** `Validate Owner Details`, `Upload Property Images`, `Verify Property Information`
-*   **Pre-conditions:**
-    *   Property owner has submitted the property for listing.
-    *   The agent is authenticated and logged into the system.
-    *   The property does not already exist in the system.
-    *   Required property documentation is available.
-*   **Post-conditions:**
-    *   Property record is successfully stored in the system database.
-    *   Property becomes available for search and listing.
-    *   Confirmation is displayed to the agent.
-*   **Flow of Activities:**
-
-
----
-
-## 🗺️ Implementation WBS (Work Breakdown Structure)
-
-The execution map for bringing the system into software production is planned according to the following system lifecycles:
-
-*   **Phase 1: Foundation & Data Modeling (Sprint 1)**
-    *   Initialize structural relational physical schema scripts for database containment.
-    *   Establish structural entity mappings (`Report.java`, `User.java`, `Property.java`).
-    *   Establish baseline low-level database connection factories (`DBConnection.java`).
-*   **Phase 2: Persistent Storage Layer Development (Sprint 2)**
-    *   Code internal structural data processing methods inside `ReportDAO.java`.
-    *   Optimize multi-table data processing connections using optimized `JOIN` operations.
-    *   Build localized parameter arrays matching regional filter actions.
-*   **Phase 3: Controller Routing & Document Streams (Sprint 3)**
-    *   Initialize transaction endpoints inside the central controller layer (`ReportServlet.java`).
-    *   Incorporate OpenPDF document compilation modules for compiling formatting routines.
-    *   Secure low-level memory parameters against streaming context thread block blocks.
-*   **Phase 4: Web Presentation Integration (Sprint 4)**
-    *   Refine structural compilation frameworks across view pages (`Report.jsp`).
-    *   Enforce layout preservation guidelines using CSS layout boundaries.
-    *   Validate asynchronous messaging parameters across front-to-back operations.
-
----
-
-## ⚙️ Local Development Setup
+## Getting started
 
 ### Prerequisites
-*   JDK 8 or newer
-*   A Java EE / Servlet 4 container: GlassFish 4.1+ (NetBeans default) or Apache Tomcat 9
-*   PostgreSQL 12 or newer
+* JDK 8 or newer
+* A Servlet 4 container: GlassFish 4.1+ (the NetBeans default) or Apache Tomcat 9
+* PostgreSQL 12 or newer
 
 ### 1. Create the database
 ```sql
 CREATE DATABASE "RealEstateManagementSystem";
 ```
-Connect to it and run `The RealEstate Management System  DBscript.sql`. The script drops and recreates all tables and loads demo data.
+Connect to it and run `The RealEstate Management System  DBscript.sql`. The script drops and recreates all tables, then loads demo data. Run it again at any time to reset the demo.
 
 ### 2. Point the app at your database (optional)
-The app connects to `jdbc:postgresql://localhost:5432/RealEstateManagementSystem` as `postgres` / `123456` by default.
-To use something else, set these environment variables (or `-D` JVM properties) on the server. No recompile is needed:
+By default the app connects to `jdbc:postgresql://localhost:5432/RealEstateManagementSystem` as `postgres` / `123456`.
+To use another database, set these environment variables (or `-D` JVM properties) on the server. You don't need to recompile:
 
 | Variable | Example |
 | :--- | :--- |
@@ -143,8 +73,8 @@ To use something else, set these environment variables (or `-D` JVM properties) 
 | `REMS_DB_PASSWORD` | `your-password` |
 
 ### 3. Build and deploy
-*   **NetBeans:** open the `RealEstateManagementSystem` folder as a project, then choose **Clean and Build**, then **Run**. Library jars are in `RealEstateManagementSystem/lib`.
-*   **Ready-made WAR:** deploy `RealEstateManagementSystem/dist/RealEstateManagementSystem.war` to GlassFish or copy it into Tomcat's `webapps` folder.
+* **NetBeans:** open the `RealEstateManagementSystem` folder as a project, then choose **Clean and Build** and **Run**. The library jars are in `RealEstateManagementSystem/lib`.
+* **Ready-made WAR:** deploy `RealEstateManagementSystem/dist/RealEstateManagementSystem.war` to GlassFish, or copy it into Tomcat's `webapps` folder.
 
 Then open `http://localhost:8080/RealEstateManagementSystem/`.
 
@@ -160,17 +90,50 @@ Every demo account uses the password **`Password123`**.
 | Tenant | `bob@demo.com`, `lerato@demo.com`, `thabo@demo.com` |
 | Maintenance Staff | `eddie@demo.com` |
 
-Public sign-up creates **Tenant** accounts only. Owner and staff accounts are created by an administrator under **Users** or **Add Member**.
+Change or remove these accounts before using the system with real data.
 
 ---
 
-## 🔐 Security
-*   Every page except the landing, login and sign-up pages requires a session. `AuthFilter` also enforces role-based access to each page and action.
-*   Passwords are stored as SHA-256 hashes. All user-supplied text is HTML-escaped before display, and every query uses prepared statements.
-*   Session cookies are HttpOnly, and the session ID is renewed at login.
+## Project structure
+
+```
+RealEstateManagementSystem/
+├── src/java/ac/za/tut/
+│   ├── entities/   User, Property, Tenant, Application, MaintenanceRequest, Report
+│   ├── dao/        Database access (one DAO per table, plus DBConnection)
+│   ├── web/        Servlets and AuthFilter (access control)
+│   └── util/       Html (escaping, badges) and Icon (SVG icons and logo)
+├── web/
+│   ├── *.jsp              Pages: landing, login, sign-up, dashboard, lists and forms
+│   ├── WEB-INF/jspf/      Shared fragments: head, sidebar, alerts, footer, forms
+│   ├── css/app.css        The single stylesheet for the whole app
+│   ├── js/                Table search, and password helpers on the login and sign-up pages
+│   └── images/            Background photography
+├── lib/            OpenPDF and PostgreSQL JDBC driver
+└── dist/           Built WAR file
+```
 
 ---
 
-## 🎨 Design
-All pages share one stylesheet (`web/css/app.css`) and common fragments in `web/WEB-INF/jspf/` (head, navigation, alerts, footer and shared forms).
-Background photography in `web/images/` comes from [Unsplash](https://unsplash.com) and is used under the Unsplash License.
+## Security
+* Every page except the landing, login and sign-up pages requires a session, and each role can reach only its own pages and actions.
+* Passwords are stored as SHA-256 hashes. Public sign-up always creates a Tenant account, whatever the request contains.
+* All user-entered text is HTML-escaped before it is displayed, and every query uses prepared statements.
+* Session cookies are HttpOnly. The session ID is renewed at login, and protected pages are not cached, so pressing **Back** after logout does not reveal any data.
+
+---
+
+## Design
+* **Colours:** a navy and gold palette used throughout.
+  * Gold marks items waiting for action.
+  * Navy marks items that are in progress or complete.
+  * Grey marks items that are closed.
+* **Icons:** inline SVG from the Lucide set, plus a custom REMS logo.
+* **Font:** Poppins.
+* **Layout:** a fixed sidebar with role-based menus and live counters. On phones the sidebar collapses into a slide-out menu.
+* **Photos:** background photography in `web/images/` comes from [Unsplash](https://unsplash.com) and is used under the Unsplash License.
+
+---
+
+## License
+Released under the [GNU General Public License v3.0](LICENSE).

@@ -43,6 +43,13 @@
                     <option value="">All statuses</option>
                     <option>Available</option><option>Rented</option><option>Sold</option>
                 </select>
+                <select id="sort" style="max-width:200px" onchange="sortCards()" aria-label="Sort properties">
+                    <option value="">Sort: default order</option>
+                    <option value="address">Address (A&ndash;Z)</option>
+                    <option value="size">Size (largest first)</option>
+                    <option value="rooms">Rooms (most first)</option>
+                </select>
+                <button type="button" class="chip" id="savedOnly" aria-pressed="false" onclick="toggleSaved()"><%= Icon.svg("heart") %> Saved <em id="savedCount">0</em></button>
             </div>
             <% if (canManage) { %>
                 <a href="PropertyServlet?action=add" class="btn btn-primary"><%= Icon.svg("plus") %> Add property</a>
@@ -54,12 +61,13 @@
         <% } else { %>
         <div class="prop-grid" id="grid">
             <% for (Property p : properties) { %>
-            <article class="prop-card" data-text="<%= Html.esc((p.getAddress() + " " + p.getType() + " " + p.getOwnerName()).toLowerCase()) %>" data-status="<%= Html.esc(p.getStatus()) %>">
+            <article class="prop-card" data-id="<%= p.getPropertyID() %>" data-address="<%= Html.esc(String.valueOf(p.getAddress()).toLowerCase()) %>" data-size="<%= p.getSize() %>" data-rooms="<%= p.getRooms() %>" data-text="<%= Html.esc((p.getAddress() + " " + p.getType() + " " + p.getOwnerName()).toLowerCase()) %>" data-status="<%= Html.esc(p.getStatus()) %>">
                 <a href="PropertyServlet?action=view&propertyID=<%= p.getPropertyID() %>">
                     <div class="ph" style="background-image:url('<%= Html.propertyImage(p.getType(), p.getPropertyID()) %>')">
                         <span class="<%= Html.badge(p.getStatus()) %>"><%= Html.esc(p.getStatus()) %></span>
                     </div>
                 </a>
+                <button type="button" class="fav" aria-pressed="false" aria-label="Save this property" title="Save this property" onclick="toggleFav(this)"><%= Icon.svg("heart") %></button>
                 <div class="body">
                     <h3><a href="PropertyServlet?action=view&propertyID=<%= p.getPropertyID() %>" style="color:inherit"><%= Html.esc(p.getAddress()) %></a></h3>
                     <div class="meta">
@@ -88,18 +96,67 @@
 
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>
 <script>
+    // ---- saved properties (remembered in this browser)
+    var FAV = 'rems.savedProperties', savedOnly = false;
+    function favs() { try { return JSON.parse(localStorage.getItem(FAV) || '[]'); } catch (e) { return []; } }
+    function saveFavs(list) { try { localStorage.setItem(FAV, JSON.stringify(list)); } catch (e) { } }
+    function paintFavs() {
+        var list = favs(), n = 0;
+        document.querySelectorAll('#grid .prop-card').forEach(function (c) {
+            var on = list.indexOf(c.dataset.id) !== -1;
+            if (on) n++;
+            var b = c.querySelector('.fav');
+            b.classList.toggle('on', on);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            b.title = on ? 'Remove from saved' : 'Save this property';
+        });
+        var cnt = document.getElementById('savedCount');
+        if (cnt) cnt.textContent = n;
+    }
+    function toggleFav(btn) {
+        var id = btn.closest('.prop-card').dataset.id, list = favs(), i = list.indexOf(id);
+        if (i === -1) list.push(id); else list.splice(i, 1);
+        saveFavs(list);
+        btn.classList.remove('pop-in'); void btn.offsetWidth; btn.classList.add('pop-in');
+        paintFavs();
+        filterCards();
+    }
+    function toggleSaved() {
+        savedOnly = !savedOnly;
+        var b = document.getElementById('savedOnly');
+        b.classList.toggle('on', savedOnly);
+        b.setAttribute('aria-pressed', savedOnly ? 'true' : 'false');
+        filterCards();
+    }
+    // ---- sorting
+    var original = null;
+    function sortCards() {
+        var grid = document.getElementById('grid');
+        if (!grid) return;
+        var cards = Array.prototype.slice.call(grid.querySelectorAll('.prop-card'));
+        if (!original) original = cards.slice();
+        var by = document.getElementById('sort').value;
+        var sorted = !by ? original.slice() : cards.sort(function (a, b) {
+            if (by === 'address') return a.dataset.address.localeCompare(b.dataset.address);
+            return (+b.dataset[by]) - (+a.dataset[by]);
+        });
+        sorted.forEach(function (c) { grid.appendChild(c); });
+    }
+
     function filterCards() {
         var q = document.getElementById('q').value.toLowerCase().trim();
         var st = document.getElementById('st').value;
-        var shown = 0;
+        var shown = 0, list = favs();
         document.querySelectorAll('#grid .prop-card').forEach(function (c) {
-            var ok = c.dataset.text.indexOf(q) !== -1 && (!st || c.dataset.status === st);
+            var ok = c.dataset.text.indexOf(q) !== -1 && (!st || c.dataset.status === st)
+                    && (!savedOnly || list.indexOf(c.dataset.id) !== -1);
             c.style.display = ok ? '' : 'none';
             if (ok) shown++;
         });
         var none = document.getElementById('none');
         if (none) none.style.display = shown ? 'none' : 'block';
     }
+    paintFavs();
 </script>
 </body>
 </html>

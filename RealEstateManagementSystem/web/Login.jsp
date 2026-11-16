@@ -24,7 +24,6 @@
         </a>
 
         <div class="auth2-copy">
-            <span class="auth2-pill"><%= Icon.svg("shield-check") %> Secure role-based access</span>
             <h2>Welcome home to <span>smarter</span> property management.</h2>
             <p>Listings, leases, maintenance and reports &mdash; all in one secure dashboard for owners, tenants and teams.</p>
 

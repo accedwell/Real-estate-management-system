@@ -1,6 +1,8 @@
 <%@page import="ac.za.tut.util.Icon"%>
 <%@page import="ac.za.tut.util.Html"%>
 <%@page import="ac.za.tut.dao.ReportDAO"%>
+<%@page import="ac.za.tut.dao.ApplicationDAO"%>
+<%@page import="ac.za.tut.dao.MaintenanceRequestDAO"%>
 <%--
     App shell: fixed sidebar + top bar. Opens <div class="app-main">, which
     footer.jspf closes, so every logged-in page sits inside the layout.
@@ -31,6 +33,12 @@
         return "";
     }
 
+    /** One notification row for the bell menu. */
+    private String note(String key, String href, String icon, String tone, String title, String sub) {
+        return "<a class=\"note-item\" data-key=\"" + Html.esc(key) + "\" href=\"" + href + "\"><span class=\"note-ico note-" + tone + "\">"
+                + Icon.svg(icon) + "</span><span class=\"note-txt\"><strong>" + title + "</strong><small>" + sub + "</small></span></a>";
+    }
+
     /** One sidebar link, highlighted when it is the current section. */
     private String navLink(String current, String key, String href, String icon, String label, int badge) {
         return "<a class=\"side-link" + (key.equals(current) ? " active" : "") + "\" href=\"" + href + "\">"
@@ -53,6 +61,54 @@
             navOpen = nm.getOrDefault("openMaintenance", 0);
         } catch (Exception ignored) { /* badges are optional */ }
     }
+    // ---------------------------------------------------------- notifications (bell)
+    StringBuilder navNotes = new StringBuilder();
+    int navNoteCount = 0;
+    try {
+        if (navStaff) {
+            if (navPending > 0) { navNoteCount++; navNotes.append(note("apps-" + navPending, "ApplicationServlet?action=list", "file-text", "gold",
+                    navPending + " application" + (navPending == 1 ? "" : "s") + " waiting", "Review and approve or reject them")); }
+            if (navOpen > 0) { navNoteCount++; navNotes.append(note("maint-" + navOpen, "MaintenanceRequestServlet?action=list", "wrench", "navy",
+                    navOpen + " open maintenance request" + (navOpen == 1 ? "" : "s"), "Pending or in progress")); }
+        } else if ("Maintenance".equals(navRole)) {
+            int hi = 0;
+            for (java.util.Map<String, String> r : new MaintenanceRequestDAO().getRequestDetails(null)) {
+                if (!"Resolved".equals(r.get("status")) && "High".equals(r.get("priority"))) hi++;
+            }
+            if (hi > 0) { navNoteCount++; navNotes.append(note("hi-" + hi, "MaintenanceRequestServlet?action=list", "alert", "navy",
+                    hi + " high-priority job" + (hi == 1 ? "" : "s"), "Handle these first")); }
+            if (navOpen > 0) { navNoteCount++; navNotes.append(note("open-" + navOpen, "MaintenanceRequestServlet?action=list", "clipboard-list", "gold",
+                    navOpen + " open work order" + (navOpen == 1 ? "" : "s"), "In your work queue")); }
+        } else if ("Tenant".equals(navRole)) {
+            Integer navUid = (Integer) session.getAttribute("userID");
+            int shown = 0;
+            for (java.util.Map<String, String> a : new ApplicationDAO().getApplicationDetails(navUid)) {
+                if (shown >= 3) break;
+                String st = a.get("status");
+                String addr = Html.esc(a.get("address"));
+                String k = "app-" + a.get("applicationID") + "-" + st;
+                if ("Approved".equals(st)) { navNotes.append(note(k, "ApplicationServlet?action=myApplications", "check-circle", "navy", "Application approved", addr)); navNoteCount++; shown++; }
+                else if ("Rejected".equals(st)) { navNotes.append(note(k, "ApplicationServlet?action=myApplications", "x", "grey", "Application not successful", addr)); navNoteCount++; shown++; }
+                else if ("Pending".equals(st)) { navNotes.append(note(k, "ApplicationServlet?action=myApplications", "clock", "gold", "Application under review", addr)); navNoteCount++; shown++; }
+            }
+            for (java.util.Map<String, String> r : new MaintenanceRequestDAO().getRequestDetails(navUid)) {
+                if ("InProgress".equals(r.get("status"))) {
+                    navNotes.append(note("req-" + r.get("requestID") + "-ip", "MaintenanceRequestServlet?action=list", "wrench", "navy",
+                            "Repair in progress", Html.esc(r.get("description"))));
+                    navNoteCount++;
+                }
+            }
+        } else if ("Owner".equals(navRole)) {
+            Integer navUid = (Integer) session.getAttribute("userID");
+            int o = 0;
+            for (java.util.Map<String, String> r : new ReportDAO().getMaintenanceReport(navUid, "Owner", "ALL", "ALL")) {
+                if (!"Resolved".equals(r.get("status"))) o++;
+            }
+            if (o > 0) { navNoteCount++; navNotes.append(note("own-" + o, "ReportServlet?action=maintenance", "wrench", "gold",
+                    o + " open repair" + (o == 1 ? "" : "s") + " on your properties", "See the maintenance report")); }
+        }
+    } catch (Exception ignored) { /* notifications are optional */ }
+
     String navRoleLabel = "Manager".equals(navRole) ? "Property Manager" : "Agent".equals(navRole) ? "Real Estate Agent"
             : "Owner".equals(navRole) ? "Property Owner" : "Maintenance".equals(navRole) ? "Maintenance Staff"
             : "Admin".equals(navRole) ? "Administrator" : Html.esc(navRole);
@@ -103,11 +159,13 @@
     </nav>
 
     <div class="side-user">
-        <span class="avatar"><%= Html.initial(navName) %></span>
-        <div class="side-user-text">
-            <strong><%= Html.escOr(navName, "User") %></strong>
-            <span><%= navRoleLabel %></span>
-        </div>
+        <a class="side-user-link" href="ProfileServlet" title="My profile">
+            <span class="avatar"><%= Html.initial(navName) %></span>
+            <div class="side-user-text">
+                <strong><%= Html.escOr(navName, "User") %></strong>
+                <span><%= navRoleLabel %></span>
+            </div>
+        </a>
         <a class="side-logout" href="LogoutServlet" title="Log out" aria-label="Log out"><%= Icon.svg("log-out") %></a>
     </div>
 </aside>
@@ -117,15 +175,37 @@
     <header class="app-topbar">
         <button class="side-toggle" type="button" aria-label="Open menu" onclick="document.body.classList.toggle('side-open')"><%= Icon.svg("menu") %></button>
         <div class="topbar-date"><%= Icon.svg("calendar") %> <%= java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("EEE, d MMM yyyy")) %></div>
+        <button class="cmd-open" type="button" data-cmd-open aria-label="Quick search"><%= Icon.svg("search") %><span>Search or jump to&hellip;</span><kbd>Ctrl K</kbd></button>
         <div class="topbar-right">
             <% if (navStaff) { %>
                 <a class="btn btn-sm btn-primary" href="PropertyServlet?action=add"><%= Icon.svg("plus") %> New property</a>
             <% } else if ("Tenant".equals(navRole)) { %>
                 <a class="btn btn-sm btn-primary" href="MaintenanceRequestServlet?action=new"><%= Icon.svg("wrench") %> Report an issue</a>
             <% } %>
-            <div class="topbar-user">
-                <span class="avatar"><%= Html.initial(navName) %></span>
-                <span class="who"><strong><%= Html.escOr(navName, "User") %></strong><span><%= Html.escOr(navEmail, navRoleLabel) %></span></span>
+            <div class="pop" id="notes">
+                <button class="bell" type="button" aria-label="Notifications" aria-haspopup="true" data-pop>
+                    <%= Icon.svg("bell") %><% if (navNoteCount > 0) { %><em class="bell-dot"><%= navNoteCount %></em><% } %>
+                </button>
+                <div class="pop-menu note-menu" role="menu">
+                    <div class="pop-head"><strong>Notifications</strong><span><%= navNoteCount == 0 ? "All caught up" : navNoteCount + (navNoteCount == 1 ? " update" : " updates") %></span></div>
+                    <% if (navNoteCount == 0) { %>
+                        <div class="note-empty"><%= Icon.svg("check-circle") %><p>You're all caught up.</p></div>
+                    <% } else { %><%= navNotes %><% } %>
+                </div>
+            </div>
+            <div class="pop">
+                <button class="topbar-user" type="button" aria-haspopup="true" data-pop>
+                    <span class="avatar"><%= Html.initial(navName) %></span>
+                    <span class="who"><strong><%= Html.escOr(navName, "User") %></strong><span><%= Html.escOr(navEmail, navRoleLabel) %></span></span>
+                    <%= Icon.svg("chevron-down", "i caret") %>
+                </button>
+                <div class="pop-menu user-menu" role="menu">
+                    <div class="pop-head"><strong><%= Html.escOr(navName, "User") %></strong><span><%= navRoleLabel %></span></div>
+                    <a href="ProfileServlet#details"><%= Icon.svg("user") %> My profile</a>
+                    <a href="ProfileServlet#security"><%= Icon.svg("lock") %> Change password</a>
+                    <a href="#" data-cmd-open><%= Icon.svg("search") %> Quick search <kbd>Ctrl K</kbd></a>
+                    <a href="LogoutServlet" class="danger"><%= Icon.svg("log-out") %> Log out</a>
+                </div>
             </div>
         </div>
     </header>
