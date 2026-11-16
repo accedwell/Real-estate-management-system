@@ -1,0 +1,7 @@
+.git
+*.pdf
+*.zip
+RealEstateManagementSystem/dist
+RealEstateManagementSystem/build
+RealEstateManagementSystem/nbproject/private
+RealEstateManagementSystem/REPORTS

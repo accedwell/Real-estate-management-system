@@ -94,6 +94,22 @@ Change or remove these accounts before using the system with real data.
 
 ---
 
+## Deploy online (Render)
+
+The repo includes a `Dockerfile` (Tomcat 9, app served at `/`) and a `render.yaml` blueprint that creates the web app and a PostgreSQL database together.
+
+1. Push this repository to GitHub.
+2. On [render.com](https://render.com), choose **New > Blueprint**, select the repository, then click **Apply**.
+3. Wait for the first build to finish (about 5 minutes). On first start the app creates its tables and demo data automatically.
+4. Open the `rems` service URL. Log in as `admin@rems.co.za` with the password stored in **rems > Environment > `REMS_ADMIN_PASSWORD`**. The other demo accounts use `Password123`.
+
+Notes:
+* On the free plan, the app sleeps after 15 minutes without traffic, and the first visit after that takes about a minute to wake it.
+* Render's free PostgreSQL database expires 30 days after it is created unless you upgrade it.
+* The app also understands a standard `DATABASE_URL` (`postgresql://user:password@host:port/db`), so the same Docker image runs on Railway, Fly.io or any Docker host.
+
+---
+
 ## Project structure
 
 ```
